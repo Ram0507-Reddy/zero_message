@@ -77,8 +77,8 @@ export default function SecureViewer({ onClose }: { onClose: () => void }) {
                     setContent("Decryption Failed (Invalid Key)");
                 }
             } else {
-                // Legacy / Non-Encrypted fallback
-                setContent(data.content);
+                // Key is REQUIRED for Secure Mode
+                setContent("Error: Decryption Key Missing. (Did you copy the full link?)");
             }
 
         } catch (e) {
