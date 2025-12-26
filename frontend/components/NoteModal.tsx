@@ -66,27 +66,18 @@ export default function NoteModal({ mode, onClose, onSaveLocal }: NoteModalProps
             // --- SECURE PATH ---
             setLoading(true);
             try {
-                // 1. Generate Client Key (Zero Knowledge)
-                const key = await generateClientKey();
-                const keyHash = await exportKeyToHash(key);
+                // 1. SKIP Client Key Generation (User requested Token-Only access)
+                // The Token itself is now the secret key (Server-side storage)
 
-                // 2. Encrypt Content Locally
-                const encA = await clientEncrypt(realityA, key);
-                const encB = await clientEncrypt(realityB, key);
-
-                // 3. Prepare Payload (No Geo)
+                // 2. Prepare Payload (Plaintext)
                 const payload = {
-                    realityA: encA,
-                    realityB: encB,
+                    realityA: realityA, // Send Plaintext
+                    realityB: realityB, // Send Plaintext
                     txToken,
-                    rxToken, // Server stores this
+                    rxToken,
                 };
 
-                // Send to Server (Server sees only Encrypted blobs)
-                // We need to update sendMessage to accept payload object or just manual fetch here?
-                // sendMessage signature is (A, B, tx, rx). It doesn't support Geo or Objects yet.
-                // Let's modify sendMessage in api.ts or just inline fetch here for speed.
-                // Inline fetch is safer for custom payload.
+                // Send to Server
                 await fetch(`${API_BASE}/send`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -94,9 +85,8 @@ export default function NoteModal({ mode, onClose, onSaveLocal }: NoteModalProps
                 });
 
                 setSuccess(true);
-                // The User needs the KEY.
-                // Link = RxToken + "#" + KeyHash
-                setFinalLink(`${rxToken}#${keyHash}`);
+                // Link is JUST the RxToken
+                setFinalLink(rxToken);
 
                 // Don't close immediately, let them copy the link
                 // setTimeout(() => onClose(), 1500); 

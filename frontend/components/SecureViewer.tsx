@@ -66,20 +66,10 @@ export default function SecureViewer({ onClose }: { onClose: () => void }) {
                 return;
             }
 
-            // 4. Client-Side Decrypt
-            if (keyHash) {
-                try {
-                    const key = await importKeyFromHash(keyHash);
-                    const plaintext = await clientDecrypt(data.content, key);
-                    setContent(plaintext);
-                } catch (e) {
-                    console.error(e);
-                    setContent("Decryption Failed (Invalid Key)");
-                }
-            } else {
-                // Key missing: Show raw encrypted content (User requested "Token Only" access)
-                setContent(data.content);
-            }
+            // 4. Content is now Plaintext (Token-Only Mode)
+            // If the user *does* have a key (legacy), we could try to decrypt, but for now we assume Plaintext.
+
+            setContent(data.content);
 
         } catch (e) {
             setContent("No note available");
