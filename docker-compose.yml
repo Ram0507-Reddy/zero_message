@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    networks:
+      - zero-net
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://zero-s.tech/notes/api
+    networks:
+      - zero-net
+
+networks:
+  zero-net:
+    driver: bridge
