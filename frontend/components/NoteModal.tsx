@@ -146,7 +146,7 @@ export default function NoteModal({ mode, onClose, onSaveLocal }: NoteModalProps
                 <button onClick={onClose} className="text-gray-400 hover:text-black text-xl">×</button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6">
 
                 {/* --- NORMAL MODE UI --- */}
                 {mode === 'normal' && (

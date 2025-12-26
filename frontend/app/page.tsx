@@ -82,25 +82,33 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-white text-[#111111] font-sans flex transition-colors duration-1000">
+    <main className="min-h-screen bg-white text-[#111111] font-sans flex flex-col md:flex-row transition-colors duration-1000 pb-20 md:pb-0">
       <TrafficNoise />
-      {/* Sidebar */}
-      <aside className="w-24 border-r border-gray-100 flex flex-col items-center py-8 fixed h-full bg-white z-10 left-0 top-0">
+
+      {/* Navigation (Sidebar on Desktop, Bottom Bar on Mobile) */}
+      <aside className="
+        fixed z-50 bg-white border-gray-100 flex items-center justify-between px-8 md:px-0 md:flex-col md:justify-start md:py-8 
+        md:w-24 md:h-full md:border-r md:left-0 md:top-0
+        w-full h-20 bottom-0 border-t md:border-t-0
+      ">
 
         {/* THE GATE: LOGO */}
         <h1
           onPointerDown={handleLogoDown}
           onPointerUp={handleLogoUp}
           onPointerLeave={handleLogoUp}
-          className="text-sm font-bold tracking-wide text-gray-800 mb-12 transform -rotate-0 cursor-default select-none"
+          className="text-sm font-bold tracking-wide text-gray-800 transform md:mb-12 cursor-default select-none order-1 md:order-none"
         >
           <span style={{ color: '#34cf82' }}>&gt;</span>Zero<span style={{ color: '#34cf82' }}>_</span>
         </h1>
 
-        {/* Add Button (Shared but changes Function based on Mode) */}
+        {/* Add Button (Center Action) */}
         <button
           onClick={() => setView('send')}
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-105 transition-all text-white ${isSecureDashboard ? 'bg-[#111111] ring-2 ring-offset-2 ring-black' : 'bg-black'}`}
+          className={`
+            w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-105 transition-all text-white order-2 md:order-none
+            ${isSecureDashboard ? 'bg-[#111111] ring-2 ring-offset-2 ring-black' : 'bg-black'}
+          `}
           title="Add Note"
         >
           +
@@ -108,10 +116,10 @@ export default function Home() {
 
         {/* Receiver Button (Only in Secure Mode) */}
         {isSecureDashboard && (
-          <>
+          <div className="flex flex-row md:flex-col gap-4 items-center order-3 md:order-none md:mt-6">
             <button
               onClick={() => setView('read')}
-              className="mt-6 w-10 h-10 bg-white border-2 border-black text-black rounded-full flex items-center justify-center text-lg hover:bg-gray-50 transition animate-in zoom-in"
+              className="w-10 h-10 bg-white border-2 border-black text-black rounded-full flex items-center justify-center text-lg hover:bg-gray-50 transition animate-in zoom-in"
               title="Secure Read"
             >
               ↓
@@ -122,21 +130,20 @@ export default function Home() {
                 setIsSecureDashboard(false);
                 console.log("DASHBOARD LOCKED");
               }}
-              className="mt-auto mb-8 w-10 h-10 text-gray-400 hover:text-red-500 rounded-full flex items-center justify-center transition animate-in fade-in"
+              className="w-10 h-10 text-gray-400 hover:text-red-500 rounded-full flex items-center justify-center transition animate-in fade-in md:mt-auto md:mb-8"
               title="Exit Secure Mode"
             >
               ✕
             </button>
-          </>
+          </div>
         )}
       </aside>
 
       {/* Main Content */}
-      <section className="flex-1 ml-24 p-12">
+      <section className="flex-1 p-6 md:p-12 md:ml-24">
         {/* Header */}
-        {/* Header */}
-        <div className="mb-12">
-          <div className="mb-8 w-full">
+        <div className="mb-8 md:mb-12">
+          <div className="mb-6 md:mb-8 w-full">
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -145,13 +152,13 @@ export default function Home() {
               </div>
               <input
                 type="text"
-                className="block w-full pl-14 pr-4 py-4 border-2 border-black rounded-full leading-5 bg-white placeholder-gray-400 text-black focus:outline-none focus:shadow-lg transition duration-150 ease-in-out font-medium text-lg"
+                className="block w-full pl-14 pr-4 py-3 md:py-4 border-2 border-black rounded-full leading-5 bg-white placeholder-gray-400 text-black focus:outline-none focus:shadow-lg transition duration-150 ease-in-out font-medium text-lg"
                 placeholder="search across notes"
               />
             </div>
           </div>
 
-          <h1 className="text-5xl font-bold tracking-tight text-black">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-black">
             {isSecureDashboard ? (
               <><span style={{ color: '#34cf82' }}>&gt;</span>Zero<span style={{ color: '#34cf82' }}>_</span></>
             ) : 'Notes'}
@@ -159,15 +166,15 @@ export default function Home() {
         </div>
 
         {/* Masonry Grid (Always shows local notes to maintain cover) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {notes.map((note, i) => (
             <div
               key={i}
               onClick={() => handleOpenLocalNote(note)}
-              className={`${note.color} p-8 rounded-[2rem] h-64 flex flex-col justify-between transition hover:shadow-xl cursor-default text-gray-900`}
+              className={`${note.color} p-6 md:p-8 rounded-3xl md:rounded-[2rem] h-56 md:h-64 flex flex-col justify-between transition hover:shadow-xl cursor-default text-gray-900`}
             >
               <div>
-                <h3 className="text-xl font-bold leading-tight mb-2">{note.title}</h3>
+                <h3 className="text-lg md:text-xl font-bold leading-tight mb-2">{note.title}</h3>
                 <p className="text-sm font-medium opacity-80 line-clamp-3">{note.body}</p>
               </div>
 
