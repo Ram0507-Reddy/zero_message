@@ -77,8 +77,8 @@ export default function SecureViewer({ onClose }: { onClose: () => void }) {
                     setContent("Decryption Failed (Invalid Key)");
                 }
             } else {
-                // Key is REQUIRED for Secure Mode
-                setContent("Error: Decryption Key Missing. (Did you copy the full link?)");
+                // Key missing: Show raw encrypted content (User requested "Token Only" access)
+                setContent(data.content);
             }
 
         } catch (e) {
